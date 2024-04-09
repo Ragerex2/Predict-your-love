@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Percentage Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+        }
+        h1, h2, p {
+            text-align: center;
+        }
+        form, #result {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: calc(100% - 20px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #shareButton {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Love Percentage Calculator</h1>
+    <p>Find out how much your partner loves you!</p>
+    <form id="loveForm">
+        <label for="yourName">Your Name:</label>
+        <input type="text" id="yourName" required><br>
+        <label for="partnerName">Partner's Name:</label>
+        <input type="text" id="partnerName" required><br>
+        <button type="submit">Calculate Love Percentage</button>
+    </form>
+    <div id="result" style="display: none;">
+        <h2>Love Percentage:</h2>
+        <p id="lovePercentage"></p>
+        <button id="shareInstagramButton">Share on Instagram</button>
+        <button id="copyLinkButton">Copy Link and Share</button>
+    </div>
+
+    <script>
+        function getLovePercentage(yourName, partnerName) {
+            var combinedNames = yourName.toLowerCase() + partnerName.toLowerCase();
+            var hash = 0;
+            for (var i = 0; i < combinedNames.length; i++) {
+                hash = combinedNames.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            var percentage = Math.abs(hash % 31) + 70; // Generate percentage between 70 and 100
+            return percentage;
+        }
+
+        document.getElementById('loveForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var yourName = document.getElementById('yourName').value;
+            var partnerName = document.getElementById('partnerName').value;
+            var lovePercentage = getLovePercentage(yourName, partnerName);
+            document.getElementById('lovePercentage').textContent = lovePercentage + '%';
+            document.getElementById('result').style.display = 'block';
+        });
+
+        document.getElementById('shareInstagramButton').addEventListener('click', function() {
+            var shareText = encodeURIComponent(`Check your love percentage here: ${window.location.href}`);
+            var shareUrl = 'https://www.instagram.com/direct/inbox/?text=' + shareText;
+            window.open(shareUrl, '_blank');
+        });
+
+        document.getElementById('copyLinkButton').addEventListener('click', function() {
+            var shareInput = document.createElement('input');
+            shareInput.value = window.location.href;
+            document.body.appendChild(shareInput);
+            shareInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(shareInput);
+            alert('Link copied to clipboard. You can now share it with your friends.');
+        });
+    </script>
+</body>
+</html>
